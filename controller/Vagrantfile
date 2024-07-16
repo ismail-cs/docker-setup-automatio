@@ -85,8 +85,25 @@ Vagrant.configure("2") do |config|
         name: docker
         state: latest
 EOL
+
+    cat <<EOL > hosts
+[webservers1]
+192.168.56.17
+
+[webservers2]
+192.168.56.18
+EOL
+
+    # Create SSH key pair
+    mkdir -p /home/vagrant/.ssh
+    ssh-keygen -t rsa -b 2048 -f /home/vagrant/.ssh/id_rsa -N ""
+
+    # Ensure correct permissions
+    chown -R vagrant:vagrant /home/vagrant/.ssh
+    chmod 700 /home/vagrant/.ssh
+    chmod 600 /home/vagrant/.ssh/id_rsa
+    chmod 644 /home/vagrant/.ssh/id_rsa.pub
   SHELL
 
   config.vm.provision "shell", inline: "chown -R vagrant:vagrant /home/vagrant/ansible"
 end
-
